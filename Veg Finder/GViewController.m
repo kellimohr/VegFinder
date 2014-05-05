@@ -21,16 +21,13 @@
     
     _mapView.delegate = self;
     
-    //Instantiate a location object.
+
     locationManager = [[CLLocationManager alloc] init];
     
-    //Delegate for the location manager.
     [locationManager setDelegate:self];
     
-    //Set some parameters for the location object.
     [locationManager setDistanceFilter:kCLDistanceFilterNone];
     [locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-    
     
     //Check if loaction services are disabled, if so send alert to user.
     if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
@@ -73,15 +70,15 @@
 
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    //Get the east and west points on the map so you can calculate the distance (zoom level) of the current map view.
+    //Get the east and west points on the map to calculate the dzoom level of the current map view.
     MKMapRect mRect = self.mapView.visibleMapRect;
     MKMapPoint eastMapPoint = MKMapPointMake(MKMapRectGetMinX(mRect), MKMapRectGetMidY(mRect));
     MKMapPoint westMapPoint = MKMapPointMake(MKMapRectGetMaxX(mRect), MKMapRectGetMidY(mRect));
     
-    //Set your current distance instance variable.
+    //Set the current distance instance variable.
     radius = MKMetersBetweenMapPoints(eastMapPoint, westMapPoint);
     
-    //Set your current center point on the map instance variable.
+    //Set the user's current center point on the map instance variable.
     currentCentre = self.mapView.centerCoordinate;
 }
 

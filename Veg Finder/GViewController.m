@@ -7,6 +7,7 @@
 //
 
 #import "GViewController.h"
+#import "GVegResturants.h"
 
 @interface GViewController ()
 
@@ -17,7 +18,124 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    
+    _mapView.delegate = self;
+    
+    //Instantiate a location object.
+    locationManager = [[CLLocationManager alloc] init];
+    
+    //Delegate for the location manager.
+    [locationManager setDelegate:self];
+    
+    //Set some parameters for the location object.
+    [locationManager setDistanceFilter:kCLDistanceFilterNone];
+    [locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+    
+    
+    //Check if loaction services are disabled, if so send alert to user.
+    if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
+       [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted  )
+    {
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Location Services Disabled"
+                                                          message:@"Locations Services are currently disabled.  Turn on location services in settings."
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        
+        [message show];
+    }
+    else{
+        _mapView.showsUserLocation = YES;
+        
+        MKUserLocation *userLocation = _mapView.userLocation;
+        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance (userLocation.location.coordinate, 5000, 5000);
+        [_mapView setRegion:region animated:YES];
+    }
+}
+
+- (IBAction)search:(id)sender {
+    
+    [self queryGooglePlaces:@"restaurant"];
+}
+
+- (IBAction)changeMapType:(id)sender {
+    if (_mapView.mapType == MKMapTypeStandard)
+        _mapView.mapType = MKMapTypeSatellite;
+    else
+        _mapView.mapType = MKMapTypeStandard;
+}
+
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    _mapView.centerCoordinate =
+    userLocation.location.coordinate;
+}
+
+
+-(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    //Get the east and west points on the map so you can calculate the distance (zoom level) of the current map view.
+    MKMapRect mRect = self.mapView.visibleMapRect;
+    MKMapPoint eastMapPoint = MKMapPointMake(MKMapRectGetMinX(mRect), MKMapRectGetMidY(mRect));
+    MKMapPoint westMapPoint = MKMapPointMake(MKMapRectGetMaxX(mRect), MKMapRectGetMidY(mRect));
+    
+    //Set your current distance instance variable.
+    radius = MKMetersBetweenMapPoints(eastMapPoint, westMapPoint);
+    
+    //Set your current center point on the map instance variable.
+    currentCentre = self.mapView.centerCoordinate;
+}
+
+#pragma mark - queryGooglePlaces
+-(void) queryGooglePlaces: (NSString *) googleType {
+    NSString *url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/search/json?location=%f,%f&radius=%@&types=%@&keyword=vegetarian&sensor=true&key=%@", currentCentre.latitude, currentCentre.longitude, [NSString stringWithFormat:@"%i", radius], googleType, kGOOGLE_API_KEY];
+    
+    NSURL *googleRequestURL=[NSURL URLWithString:url];
+
+    [NSURLConnection sendAsynchronousRequest: [NSURLRequest requestWithURL: googleRequestURL]
+                                       queue: [NSOperationQueue mainQueue]
+                           completionHandler: ^( NSURLResponse *response, NSData *data, NSError *error ) {
+                               
+                               NSDictionary* json = [NSJSONSerialization
+                                                     JSONObjectWithData:data
+                                                     options:kNilOptions
+                                                     error:&error];
+                               
+                               
+                               NSArray* places = [json objectForKey:@"results"];
+                               [self plotPositions:places];
+
+                           }];
+}
+
+-(void)plotPositions:(NSArray *)data {
+    
+    for (id<MKAnnotation> annotation in _mapView.annotations) {
+        if ([annotation isKindOfClass:[GVegResturants class]]) {
+            [_mapView removeAnnotation:annotation];
+        }
+    }
+    
+    for (int i=0; i<[data count]; i++) {
+        
+        NSDictionary* place = [data objectAtIndex:i];
+        
+        NSDictionary *geo = [place objectForKey:@"geometry"];
+        
+        NSDictionary *loc = [geo objectForKey:@"location"];
+        
+        NSString *name=[place objectForKey:@"name"];
+        NSString *vicinity=[place objectForKey:@"vicinity"];
+        
+        CLLocationCoordinate2D placeCoord;
+        
+        placeCoord.latitude=[[loc objectForKey:@"lat"] doubleValue];
+        placeCoord.longitude=[[loc objectForKey:@"lng"] doubleValue];
+        
+        GVegResturants *placeObject = [[GVegResturants alloc] initWithName:name address:vicinity coordinate:placeCoord];
+        NSLog(@"Get ready to add google anotations!");
+        [_mapView addAnnotation:placeObject];
+        [_mapView showAnnotations: _mapView.annotations animated: YES];
+    }
 }
 
 - (void)didReceiveMemoryWarning

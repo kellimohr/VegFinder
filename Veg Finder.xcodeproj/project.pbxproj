@@ -21,6 +21,9 @@
 		A3271CFC1915DF5300489019 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3271CDE1915DF5300489019 /* UIKit.framework */; };
 		A3271D041915DF5300489019 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A3271D021915DF5300489019 /* InfoPlist.strings */; };
 		A3271D061915DF5300489019 /* Veg_FinderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3271D051915DF5300489019 /* Veg_FinderTests.m */; };
+		A3271D111915E1FF00489019 /* GVegResturants.m in Sources */ = {isa = PBXBuildFile; fileRef = A3271D101915E1FF00489019 /* GVegResturants.m */; };
+		A3271D131915E60000489019 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3271D121915E60000489019 /* MapKit.framework */; };
+		A3271D151915E60A00489019 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3271D141915E60A00489019 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,10 @@
 		A3271D011915DF5300489019 /* Veg FinderTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Veg FinderTests-Info.plist"; sourceTree = "<group>"; };
 		A3271D031915DF5300489019 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3271D051915DF5300489019 /* Veg_FinderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Veg_FinderTests.m; sourceTree = "<group>"; };
+		A3271D0F1915E1FF00489019 /* GVegResturants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GVegResturants.h; sourceTree = "<group>"; };
+		A3271D101915E1FF00489019 /* GVegResturants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GVegResturants.m; sourceTree = "<group>"; };
+		A3271D121915E60000489019 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		A3271D141915E60A00489019 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +67,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3271D151915E60A00489019 /* CoreLocation.framework in Frameworks */,
+				A3271D131915E60000489019 /* MapKit.framework in Frameworks */,
 				A3271CDD1915DF5300489019 /* CoreGraphics.framework in Frameworks */,
 				A3271CDF1915DF5300489019 /* UIKit.framework in Frameworks */,
 				A3271CDB1915DF5300489019 /* Foundation.framework in Frameworks */,
@@ -101,6 +110,8 @@
 		A3271CD91915DF5300489019 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A3271D141915E60A00489019 /* CoreLocation.framework */,
+				A3271D121915E60000489019 /* MapKit.framework */,
 				A3271CDA1915DF5300489019 /* Foundation.framework */,
 				A3271CDC1915DF5300489019 /* CoreGraphics.framework */,
 				A3271CDE1915DF5300489019 /* UIKit.framework */,
@@ -119,6 +130,8 @@
 				A3271CF01915DF5300489019 /* GViewController.m */,
 				A3271CF21915DF5300489019 /* Images.xcassets */,
 				A3271CE11915DF5300489019 /* Supporting Files */,
+				A3271D0F1915E1FF00489019 /* GVegResturants.h */,
+				A3271D101915E1FF00489019 /* GVegResturants.m */,
 			);
 			path = "Veg Finder";
 			sourceTree = "<group>";
@@ -253,6 +266,7 @@
 				A3271CEB1915DF5300489019 /* GAppDelegate.m in Sources */,
 				A3271CE71915DF5300489019 /* main.m in Sources */,
 				A3271CF11915DF5300489019 /* GViewController.m in Sources */,
+				A3271D111915E1FF00489019 /* GVegResturants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
